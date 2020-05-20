@@ -1,0 +1,21 @@
+form.navbar-form.form-inline.navbar-right(ng-hide="identity.isAuthenticated()" name="loginForm")
+  .form-group
+    input.form-control(placeholder="Username", ng-model="username", required)
+  .form-group
+    input.form-control(type="password", placeholder="Password", ng-model="password" required)
+  button.btn.btn-primary(ng-click="signin(username, password)" data-ng-disabled="loginForm.$invalid") Sign In
+  //button.btn.btn-primary(ng-click="loginViaFacebook()") Sign In via Facebook
+  //a(href="/signup")
+  //  button.btn.btn-primary() Sign Up
+ul.nav.navbar-nav.navbar-right(ng-show="identity.isAuthenticated()")
+  li.dropdown
+    a.dropdown-toggle(href="", data-toggle="dropdown")
+      | {{identity.currentUser.firstName + " " + identity.currentUser.lastName}}
+      b.caret
+    ul.dropdown-menu
+      li(ng-show="identity.isAuthorized('admin')")
+        a(href="/admin/users") User Admin
+      //li
+      //  a(href="/profile") Profile
+      li
+        a(href="", ng-click="signout()") Sign Out

@@ -1,0 +1,22 @@
+.panel.panel-default(ng-if="currentAdopter")
+  .panel-heading.clearfix
+    h3.panel-title
+      .pull-right(ng-switch="currentAdopter.criteria.count == currentAdopter.adoptees.length")
+        span.label.label-success(ng-switch-when="true") Matched
+        span.label.label-warning(ng-switch-default) Not Matched
+        | &nbsp;
+        span.badge {{currentAdopter.criteria.count - currentAdopter.adoptees.length || ''}}
+      | {{currentAdopter.name}}&nbsp;
+  .panel-body
+    div(data-criteriaset, data-adopter="currentAdopter", data-fields="adopterFields", data-change="criteriaChange(newValue, oldValue)")
+  .panel-footer
+    btn-toolbar.pull-right
+      button.btn.btn-primary(ng-click="emailAdopter(currentAdopter)", ng-if="currentAdopter.notifyMethods.indexOf('Email') > -1" data-ng-disabled="permission.readonly") 
+        i.fa.fa-envelope
+        | &nbsp;Email
+      | &nbsp;
+      button.btn.btn-primary(ng-click="printAdopter(currentAdopter)" data-ng-disabled="permission.readonly")
+        i.fa.fa-print
+        | &nbsp;Print
+    btn-toolbar
+      button.btn.btn-default(ng-click="getNextAdopter()") Next Adopter

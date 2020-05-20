@@ -1,0 +1,14 @@
+doctype
+html
+  head
+    title TopekaCB
+    link(href="/unitedway.png", rel="icon", type="image/png")
+    link(rel="stylesheet", href="/vendor/toastr/toastr.css")
+    link(rel="stylesheet", type="text/css" href="/vendor/textAngular/dist/textAngular.css")
+    link(rel="stylesheet", type="text/css" href="/vendor/font-awesome/css/font-awesome.css")
+    link(rel="stylesheet", href="/vendor/pace/pace-theme-minimal.css")
+    link(rel="stylesheet", href="/assets/css/site.css")
+  body(ng-app='app')
+    include currentUser
+    block main-content
+    include scripts

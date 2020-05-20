@@ -1,0 +1,68 @@
+form(name="adopterSearchForm", novalidate)
+  .btn-toolbar
+    .input-group.input-group-sm.input-group-filter
+      input.form-control(type="search", placeholder="Name, Org or Dept", ng-model="adopterFilter.name")        
+      .input-group-btn
+        button.btn.btn-default(ng-click="searchAdopters()")
+          i.fa.fa-search
+    .input-group.input-group-sm.input-group-sort
+      .input-group-addon Sort By:
+      input.form-control(type="text", ng-model="adopterSort.text", disabled)
+      .input-group-btn
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown")
+          i.fa.fa-caret-down
+        ul.dropdown-menu.pull-right
+          li(ng-repeat="option in adopterSort.options", ng-class="{active: adopterSort.text == option.text}")
+            a(href="", ng-click="applyAdopterSort(option)") {{option.text}}
+    a.collapse-toggle.collapsed(href="", tabindex="-1", data-toggle="collapse", data-target="#adopterFilter")
+      i.fa.fa-cog
+  .collapse(id="adopterFilter", ng-style="{'margin-top': 5}")
+    .btn-group.btn-group-justified
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopterFilter.entity}")
+          | {{adopterFilter.entity || 'Adopter'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopterFilter.entity}")
+            a(href="", ng-click="applyAdopterFilter({entity: null})") Any Adopter
+          li(ng-repeat="e in adopterEnums.entity", ng-class="{active: adopterFilter.entity == e}")
+            a(href="", ng-click="applyAdopterFilter({entity: e})", ng-bind="e")
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopterFilter.status}")
+          | {{adopterFilter.status || 'Status'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopterFilter.status}")
+            a(href="", ng-click="applyAdopterFilter({status: null})") Any Status
+          li(ng-repeat="e in adopterEnums.status", ng-class="{active: adopterFilter.status == e}")
+            a(href="", ng-click="applyAdopterFilter({status: e})", ng-bind="e")
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopterFilter.household}")
+          | {{adopterFilter.household || 'Household'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopterFilter.household}")
+            a(href="", ng-click="applyAdopterFilter({household: null})") Any Household
+          li(ng-repeat="e in adopterEnums.household", ng-class="{active: adopterFilter.household == e}")
+            a(href="", ng-click="applyAdopterFilter({household: e})", ng-bind="e")
+      
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopterFilter.members}")
+          | {{adopterFilter.members || 'Members'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopterFilter.members}")
+            a(href="", ng-click="applyAdopterFilter({members: null})") Members
+          li(ng-repeat="e in adopterEnums.members", ng-class="{active: adopterFilter.members == e}")
+            a(href="", ng-click="applyAdopterFilter({members: e})", ng-bind="e")
+
+
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopterFilter.special}")
+          | {{adopterFilter.special || 'Special Needs'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopterFilter.special}")
+            a(href="", ng-click="applyAdopterFilter({special: null})") Any Special Need
+          li(ng-repeat="e in adopterEnums.special", ng-class="{active: adopterFilter.special == e}")
+            a(href="", ng-click="applyAdopterFilter({special: e})", ng-bind="e")

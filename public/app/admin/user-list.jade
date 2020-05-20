@@ -1,0 +1,129 @@
+.container
+  .page-header
+    h1 Users
+  .panel.panel-default(ng-class="{busy: busy()}")
+    .panel-heading.clearfix
+      form.pull-left
+        .btn-toolbar
+          .input-group.input-group-filter
+            input.form-control(type="text", placeholder="Filter", ng-model="searchText")
+      a.btn.btn-link.pull-right(href="#userModal" data-ng-click="newUser()" data-target="#userModal" data-toggle="modal")
+        i.fa.fa-plus.fa-lg
+    table.table.table-hover
+      thead
+        tr
+          th Name
+          th Username
+          th Active?
+          th Facebook?
+          th Roles
+      tbody      
+        tr(ng-repeat="user in users | filter: searchText" ng-click="selectUser(user)"
+          data-toggle="modal" 
+          data-target="#userModal")
+          td {{user.firstName + ' ' + user.lastName}}
+          td {{user.username}}
+          td {{(user.active === true)? 'Yes' :'No'}}
+          td {{(user.facebook.id)? 'Yes' : 'No'}}
+          td
+            span(ng-repeat="role in user.roles") {{role}}
+              br
+  div.modal.fade(id="userModal" 
+    tabindex="-1" 
+    role="dialog" 
+    aria-hidden="true" data-backdrop="static")
+    div.modal-dialog
+      div.modal-content
+        form(name="userForm" id="userForm"
+          class="form-horizontal"
+          novalidate)
+          div.modal-header
+            button(type="button" 
+              class="close" 
+              data-dismiss="modal")
+                span(aria-hidden="true") &times;
+                span.sr-only Close
+            h4.modal-title {{selectedUser.firstName || 'New User'}}     
+          div.modal-body
+            fieldset
+              div(class="form-group" 
+                data-ng-class="{'has-error': userForm.firstName.$invalid && userForm.firstName.$dirty}")
+                  label(class="col-sm-4 control-label") First Name 
+                    span(title="Required") *
+                  div(class="col-sm-8")
+                    input(class="form-control" 
+                      data-ng-model="selectedUser.firstName" 
+                      name="firstName" 
+                      required 
+                      type="text" 
+                      data-select-on-focus="true")
+                    span(class="help-block" 
+                      data-ng-show="userForm.firstName.$invalid && userForm.firstName.$dirty") Last Name is required
+              div(class="form-group" 
+                data-ng-class="{'has-error': userForm.lastName.$invalid && userForm.lastName.$dirty}")
+                  label(class="col-sm-4 control-label") Last Name 
+                    span(title="Required") *
+                  div(class="col-sm-8")
+                    input(class="form-control" 
+                      data-ng-model="selectedUser.lastName" 
+                      name="lastName" 
+                      required 
+                      type="text" 
+                      data-select-on-focus="true")
+                    span(class="help-block" 
+                      data-ng-show="userForm.lastName.$invalid && userForm.lastName.$dirty") Last Name is required
+              div(class="form-group" 
+                data-ng-class="{'has-error': userForm.userName.$invalid && userForm.userName.$dirty}")
+                  label(class="col-sm-4 control-label") Username 
+                    span(title="Required") *
+                  div(class="col-sm-8")
+                    input(class="form-control" 
+                      data-ng-model="selectedUser.username" 
+                      name="userName" 
+                      required 
+                      type="text"
+                      data-ng-disabled="selectedUser.facebook.id" 
+                      data-select-on-focus="true")
+                    span(class="help-block" 
+                      data-ng-show="userForm.userName.$invalid && userForm.userName.$dirty") Username is required
+              div(class="form-group"
+              	data-ng-class="{'has-error': userForm.password.$invalid && userForm.password.$dirty}")
+                  label(class="col-sm-4 control-label") Password 
+                    span(title="Required") *
+                  div(class="col-sm-8")
+                    input(class="form-control" 
+                      data-ng-model="selectedUser.password" 
+                      name="password" 
+                      data-ng-required="!selectedUser._id" 
+                      type="password" 
+                      data-ng-disabled="selectedUser.facebook.id"
+                      data-select-on-focus="true" data-ng-change="validatePassword(selectedUser.password)")
+                    span(class="help-block" 
+                      data-ng-show="userForm.password.$invalid && userForm.password.$dirty") Minimum six characters with at least one special character or number.
+              div(class="form-group" 
+                data-ng-class="{'has-error': userForm.roles.$invalid && userForm.roles.$dirty}")
+                label(class="col-sm-4 control-label") Roles 
+                  span(title="Required" class="required-field") *
+                div(class="col-sm-8")
+                  div(class="checkbox" data-ng-repeat="r in roles | orderBy:'name'")
+                    label
+                      input(type="checkbox"                        
+                        data-ng-model="r.selected" value="{{r.value}}") 
+                      {{r.name}}
+              div(class="form-group")
+                label(class="col-sm-4 control-label") Active 
+                  span(title="Required" class="required-field") *
+                div(class="col-sm-8")
+                  div(class="checkbox")
+                    label
+                      input(type="checkbox"                        
+                        data-ng-model="selectedUser.active")
+                      br                     
+          div.modal-footer
+            button(type="button" 
+              class="btn btn-default" 
+              data-dismiss="modal" data-ng-click="cancel()") Close
+            button(type="button" 
+              class="btn btn-primary" 
+              data-ng-click="saveUser()"
+              data-ng-disabled="userForm.$invalid || userForm.password.$invalid || (roles | filter: {selected:true} : true).length===0") {{selectedUser._id? 'Update' : 'Create'}}

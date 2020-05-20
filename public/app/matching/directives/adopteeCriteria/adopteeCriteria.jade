@@ -1,0 +1,76 @@
+.panel.panel-default(ng-class="{busy: busy()}")
+    .panel-heading.clearfix
+        h3.panel-title {{currentAdoptee.firstName + ' ' + currentAdoptee.lastName}}
+            .pull-right {{currentAdoptee.language + ' ' + currentAdoptee.englishSpeaker}}
+    .panel-body
+        .row
+            .col-sm-7
+                .form-group
+                    label Household Types
+                    .checkbox(ng-repeat="e in adopteeEnums.household")
+                        label
+                            input(type="checkbox", ng-value="e", ng-checked="currentAdoptee.criteria.householdType.indexOf(e) > -1")
+                            | {{e}}
+            .col-sm-5
+                .form-group
+                    label Children's Ages
+                    .checkbox(ng-repeat="e in ageRanges")
+                        label
+                            input(type="checkbox", ng-value="e", ng-checked="adopteeAges.indexOf(e) > -1")
+                            | {{e}}
+                .form-group
+                    label Special Needs
+                    .checkbox(ng-repeat="e in adopteeEnums.special")
+                        label
+                            input(type="checkbox", ng-value="e", ng-checked="currentAdoptee.criteria.specialNeeds.indexOf(e) > -1")
+                            | {{e}}
+        .row
+            .col-sm-12
+                div.panel-group
+                    div.panel.panel-default
+                        div.panel-heading
+                            a.collapse-toggle.collapsed.pull-right(href="", data-toggle="collapse", data-target="#comments")
+                                i.fa.fa-chevron-down
+                            label
+                                | Story and Comments
+                        div.panel-collapse.collapse(id="comments")
+                            div.panel-body
+                                .row
+                                    .col-sm-12
+                                        label Adoptee's Story
+                                        p {{currentAdoptee.criteria.story}}
+                                .row
+                                    .col-sm-6
+                                        label Volunteer Comment
+                                        p {{currentAdoptee.criteria.volunteerComment}}
+                                    .col-sm-6
+                                        label Internal Comment
+                                        p {{currentAdoptee.criteria.internalComment}}
+        .row
+            .col-sm-12
+                div.panel-group
+                    div.panel.panel-default
+                        div.panel-heading
+                            a.collapse-toggle.collapsed.pull-right(href="", data-toggle="collapse", data-target="#householdMembers")
+                                i.fa.fa-chevron-down
+                            label
+                                | Household Members
+                        div.panel-collapse.collapse(id="householdMembers")
+                            div.panel-body
+                                table.table.table-hover
+                                    thead
+                                        tr
+                                            th Name
+                                            th Age
+                                            th Gender
+                                    tbody
+                                        tr(ng-repeat="member in currentAdoptee.householdMembers")
+                                            td {{member.name}}
+                                            td {{member.age}}
+                                            td {{member.gender}}
+    .panel-footer(ng-show="adopteeSearchResults && adopteeSearchResults.totalCount > 0")
+        .row
+            .col-md-6
+                button.btn.btn-default(ng-click="nextAdoptee()") Next Adoptee
+            .col-md-6
+                button.pull-right.btn.btn-primary(ng-click="matchAdoptee()" data-ng-disabled="permission.readonly") <  Match

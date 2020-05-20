@@ -1,0 +1,35 @@
+.container
+  .jumbotron
+    h1 Shawnee County Christmas Bureau
+    .row
+      .col-sm-3.hidden-xs
+        img.img-responsive(src="/assets/image/uw-logo.png")
+      .col-sm-6
+        .carousel.slide(auto-slide)
+          .carousel-inner
+            div.item.active(google-chart, chart="adoptionChart")
+            //
+              Google Charts cannot be drawn on a hidden element, thus all slides are initially set 
+              active via scope binding to the chart model's displayed property. this property is 
+              set true by the googlechart directive when google visualization fires chart ready event.
+              all but the first slide then have the active class cleared. and since bootstrap operates
+              outside of angular, its able to "override" the class binding.
+            div.item(google-chart, chart="ageChart", ng-class="{active: !ageChart.displayed}")
+            div.item(google-chart, chart="specialChart", ng-class="{active: !specialChart.displayed}")
+            div.item(google-chart, chart="householdChart", ng-class="{active: !householdChart.displayed}")
+          a.left.carousel-control(href="", role="button", data-target=".carousel", data-slide="prev")
+            i.fa.fa-chevron-left.fa-lg
+          a.right.carousel-control(href="", role="button", data-target=".carousel", data-slide="next")
+            i.fa.fa-chevron-right.fa-lg
+      .col-sm-3.hidden-xs
+        img.img-responsive(src="/assets/image/cb-logo-green.png")
+  div(ta-bind ng-model="message.value" ng-if="message.value.length")
+  .panel.panel-default(ng-if="identity.isAuthorized('admin')")
+    .panel-heading
+      h4.panel-title
+        a(href="" data-toggle="collapse" data-target="#editMessage") Update Content
+    .panel-collapse.collapse(id="editMessage")
+      .panel-body
+        p(text-angular ng-model="message.value")
+        .btn-toolbar.pull-right
+          button.btn.btn-primary(ng-click="updateMessage()") Save Changes

@@ -1,0 +1,13 @@
+.modal(id="siteModal", tabindex="-1", role="dialog", aria-hidden="true", data-backdrop="static", data-keyboard="false")
+  .modal-dialog.modal-sm
+    form(name="siteForm" id="siteForm", novalidate)
+      .modal-content
+        .modal-header
+          h4.modal-title Select Site
+        .modal-body
+            .radio(ng-repeat="(site, name) in sites")
+              label
+                input(name="siteOptions", type="radio", required, ng-value="site", ng-model="selected.site")
+                | {{name}}
+        .modal-footer
+          button.btn.btn-default(data-dismiss="modal", ng-click="save(selected.site)", ng-disabled="!selected.site") Save

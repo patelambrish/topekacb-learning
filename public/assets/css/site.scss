@@ -1,0 +1,219 @@
+@import "../../vendor/bootstrap-sass-official/assets/stylesheets/bootstrap";
+@import "./bootstrap-overrides";
+@import "./material/material.design";
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 56px;
+  background-image: url("../image/santa-photo.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.content {
+  padding-top: 56px;
+}
+
+.navbar-header a.navbar-brand {
+  margin-top: -18px;
+  margin-bottom: -20px;
+
+  img {
+    height: 54px;
+    display: inline-block;
+    background-color: #00417a;
+    padding-left: 8px;
+    padding-right: 8px;
+    // opacity: .75;
+  }
+  .logo-text {
+    display: none;
+    vertical-align: middle;
+    margin-left: 15px;
+    color: #FDB945;
+    .subtext {
+      font-size: .75em;
+      color: white;
+
+    }
+  }
+
+}
+
+.navbar {
+  border-bottom: none;
+  @include box-shadow(0px 4px 8px 0px $color-grey-900);
+}
+
+.jumbo-banner {
+  background-image: url("../image/tree-lg.jpg");
+  background-repeat: no-repeat;
+  padding: 0;
+  margin: 0;
+  height: 350px;
+  @include box-shadow(inset 1px -20px 90px -6px rgba(0,0,0,.8));
+
+  .container-fluid {
+    padding-top: 240px;
+  }
+
+  h1 {
+    -webkit-text-stroke: 1px #B22D0A;
+    text-shadow: 1px 1px 3px #000;
+  }
+
+  h1, h3 {
+    color: $color-grey-50;
+  }
+}
+
+.jumbo-content {
+  padding-top: 20px;
+  color: $color-grey-700;
+
+  h1, h2, h3, h4 {
+   color: $color-grey-700;
+  }
+
+  img {
+    padding: 0 40px;
+  }
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  height: 56px;
+  background: #00529b;
+  width: 100%;
+  margin: 0;
+  .container-fluid {
+    padding: 0;
+  }
+}
+.footer p {
+  margin: 0;
+  color: $color-grey-50;
+}
+
+.footer img {
+  padding-top: 5px;
+}
+.navbar-form .form-group {
+  margin-left: 10px;
+}
+.navbar-form button {
+  margin-left: 10px;
+}
+.top-padding-med {
+  padding-top: 10px;
+}
+.margin-left-med {
+  margin-left: 10px;
+}
+.toast-top-right {
+  top: 70px;
+}
+.toast-success {
+  background-color: $color-grey-900;
+}
+.btn-toolbar > a {
+  margin-left: 3px;
+}
+.btn-toolbar > .input-group-filter {
+  &.input-group-sm {
+    width: 11.5em;
+  }
+
+  width: 15em;
+}
+.btn-toolbar > .input-group-sort > input[disabled] {
+  cursor: default;
+  background-color: transparent;
+}
+.btn-toolbar > .input-group-sort {
+  &,
+  .dropdown-menu {
+    width: 22em;
+  }
+
+  &.input-group-sm {
+    &,
+    .dropdown-menu {
+      width: 18em;
+    }
+  }
+  
+}
+.input-group-page {
+  display: inline-table;
+  width: 14em;
+}
+.btn-add {
+  border-radius: 100%;
+}
+.pace {
+  .pace-progress {
+    top: 56px;
+    background:#003e75;
+    height: 5px;
+    z-index: 1050;
+    
+    .pace-progress-inner {
+      @include box-shadow(none);
+    }
+  }
+}
+.pace .pace-activity {
+  top: 73px;
+  left: 50%;
+  border-top-color: #00529B;
+  border-left-color: #00529B;
+  z-index: 1050;
+}
+.busy {
+  opacity: .65;
+}
+
+table {
+  td.tool {
+    text-align: right;
+    //width: 130px;
+
+    a {
+      margin-right: 21px;
+    }
+  }
+}
+
+input[type=date] {
+  &::-webkit-inner-spin-button,
+  &::-webkit-clear-button {
+    display: none;
+    -webkit-appearance: none;
+  }
+}
+
+.collapse-toggle {
+  .fa-chevron-up {
+      @include transition-transform(0.35s ease);
+  }
+
+  .fa-chevron-down {
+      @include transition-transform(0.35s ease);
+  }
+}
+
+.btn-toolbar {
+  .popover {
+    // override bootstrap for proper style of popover inside toolbar
+    .btn-group, 
+    .input-group {
+      float: none;
+    }
+  }
+}

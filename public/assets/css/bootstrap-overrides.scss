@@ -1,0 +1,135 @@
+@media(max-width: 1105px) and (min-width: $screen-sm) {
+  .navbar-form .form-control {
+    width: 10em;
+  }
+}
+
+@media(min-width: 1105px) {
+  .navbar-form .form-control {
+    width: auto;
+  }
+}
+
+@media(min-width: $screen-md + 2px) {
+  .navbar-header a.navbar-brand {
+    .logo-text {
+      display: inline-block !important;
+    }
+  }
+}
+
+label {
+  & + .checkbox,
+  & + .radio,
+  & + textarea,
+  & + input {
+    margin-top: 0;
+  }
+}
+
+.table-hover {
+  > tbody > tr:hover {
+    > td,
+    > th {
+      cursor: pointer;
+    }
+  }
+}
+
+.panel-footer {
+  > .pager {
+    margin: 0;
+  }
+}
+
+h1 {
+  .badge {
+    &.pull-right {
+      clear: right;
+    }
+
+  }
+}
+
+.jumbotron {
+  margin-bottom: 0;
+  background-color: transparent;
+
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  @media screen and (min-width: $screen-sm-min) {
+    padding-top:    $jumbotron-padding / 2;
+    padding-bottom: $jumbotron-padding / 2;
+
+    .container & {
+      padding-left:  ($jumbotron-padding * 1.5);
+      padding-right: ($jumbotron-padding * 1.5);
+    }
+
+    h1,
+    .h1 {
+      font-size: ($font-size-base * 3);
+    }
+  }
+}
+
+.carousel-control {
+  &.left {
+    background-image: none;
+  }
+  &.right {
+    background-image: none;
+  }
+}
+
+legend {
+  font-size: ($font-size-base * 1.15);
+  margin-bottom: 10px;
+}
+
+a {
+  &.collapse-toggle {
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.has-error {
+  .label {
+    background-color: $brand-danger;
+  }
+}
+
+.panel {
+  > .panel-collapse > textarea {
+    border-radius: 0; 
+  }
+  
+}
+
+.carousel-control {
+  .fa {
+    position: absolute;
+    top: 50%;
+    z-index: 5;
+    display: inline-block;
+  }
+  .fa-chevron-left {
+    left: 50%;
+    margin-left: -10px;
+  }
+  .fa-chevron-right {
+    right: 50%;
+    margin-right: -10px;
+  }
+}
+
+.btn-group-justified {
+  > .btn-group .btn {
+    @include text-overflow();
+  }
+}

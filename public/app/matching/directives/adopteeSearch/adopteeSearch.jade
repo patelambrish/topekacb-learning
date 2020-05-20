@@ -1,0 +1,65 @@
+form(name="adopteeSearchForm", novalidate)
+  .btn-toolbar
+    .input-group.input-group-sm.input-group-filter
+      input.form-control(type="search", placeholder="Search Criteria", ng-model="adopteeFilter.name")
+      .input-group-btn
+        button.btn.btn-default(ng-click="applyAdopteeFilter()")
+          i.fa.fa-search
+    .input-group.input-group-sm.input-group-sort
+        .input-group-addon Sort By:
+        input.form-control(type="text", ng-model="adopteeSort.text", disabled)
+        .input-group-btn
+            button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown")
+                i.fa.fa-caret-down
+            ul.dropdown-menu.pull-right
+                li(ng-repeat="option in adopteeSort.options", ng-class="{active: adopteeSort.text == option.text}")
+                    a(href="", ng-click="applyAdopteeSort(option)") {{option.text}}
+    a.collapse-toggle.collapsed(href="", tabindex="-1", data-toggle="collapse", data-target="#adopteeFilter")
+      i.fa.fa-cog
+  .collapse(id="adopteeFilter", ng-style="{'margin-top': 5}")
+    .btn-group.btn-group-justified
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopteeFilter.status}")
+          | {{adopteeFilter.status || 'Status'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopteeFilter.status}")
+            a(href="", ng-click="applyAdopteeFilter({status: null})") Any Status
+          li(ng-repeat="e in adopteeEnums.status", ng-class="{active: adopteeFilter.status == e}")
+            a(href="", ng-click="applyAdopteeFilter({status: e})", ng-bind="e")
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopteeFilter.households}")
+          | {{adopteeFilter.households || 'Household'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopteeFilter.households}")
+            a(href="", ng-click="applyAdopteeFilter({households: null})") Any Household
+          li(ng-repeat="e in adopteeEnums.household", ng-class="{active: adopteeFilter.households == e}")
+            a(href="", ng-click="applyAdopteeFilter({households: e})", ng-bind="e")
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopteeFilter.special}")
+          | {{adopteeFilter.special || 'Special Needs'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopteeFilter.special}")
+            a(href="", ng-click="applyAdopteeFilter({special: null})") Any Special Need
+          li(ng-repeat="e in adopteeEnums.special", ng-class="{active: adopteeFilter.special == e}")
+            a(href="", ng-click="applyAdopteeFilter({special: e})", ng-bind="e")
+       .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopteeFilter.members}")
+          | {{adopteeFilter.members || 'Members'}}&nbsp;
+          i.fa.fa-caret-down
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopteeFilter.members}")
+            a(href="", ng-click="applyAdopteeFilter({members: null})") Members
+          li(ng-repeat="e in adopteeEnums.members", ng-class="{active: adopteeFilter.members == e}")
+            a(href="", ng-click="applyAdopteeFilter({members: e})", ng-bind="e")
+      .btn-group.btn-group-sm
+        button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", ng-class="{active: adopteeFilter.site}")
+          | {{adopteeFilter.site || 'Site'}}&nbsp;
+          i.fa.fa-caret-down      
+        ul.dropdown-menu(role="menu")
+          li(ng-class="{active: !adopteeFilter.site}")
+            a(href="", ng-click="applyAdopteeFilter({site: null})") Site
+          li(ng-repeat="e in adopteeEnums.site", ng-class="{active: adopteeFilter.site == e}")
+            a(href="", ng-click="applyAdopteeFilter({site: e})", ng-bind="e")      

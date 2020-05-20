@@ -1,0 +1,21 @@
+table.table.table-hover
+  colgroup
+    col.col-sm-4
+    col.col-sm-6
+    col.col-sm-2
+  thead
+    tr
+      th Name
+      th Household Type
+      th Members
+      th Status
+  tbody
+    tr(ng-repeat="adoptee in adopteeSearchResults.data", ng-click="selectAdoptee(adoptee)", ng-class="{active: currentAdoptee._id == adoptee._id}")
+      td {{adoptee.firstName + ' ' + adoptee.lastName}}
+      td {{adoptee.criteria.householdType}}
+      td {{adoptee.householdMembers.length}}
+      td {{adoptee.status}}
+    tr(ng-if="adopteeSearchResults.totalCount == 0")
+      td.text-center(colspan="3") No Data Available
+    tr(ng-hide="adopteeSearchResults")
+      td.text-center(colspan="3") Select an adopter to view matching adoptees

@@ -1,0 +1,41 @@
+.container
+  .row
+    .col-sm-6
+      .page-header
+        h1 Adopter
+      .panel.panel-default(ng-class="{busy: busy()}")
+        .panel-heading.clearfix
+          div(adopter-search)
+        div(adopter-match-results)
+        .panel-footer
+           ul.pager
+             li.previous(ng-class="{disabled: adopterPage.current == 1}")
+               a(class="editAdopter" href="" ng-click="getAdopterPage(adopterPage.previous)") Previous
+             li
+               .input-group.input-group-page
+                 .input-group-addon Page
+                 input.form-control(type="number", min="1", max="{{adopterPage.total}}", ng-model="adopterPage.current", ng-change="getAdopterPage(adopterPage.current)")
+                 .input-group-addon of {{adopterPage.total}}
+             li.next(ng-class="{disabled: adopterPage.current == adopterPage.total}")
+               a(href="" ng-click="getAdopterPage(adopterPage.next)") Next
+      div(ng-include="template.adopterMatchUrl")
+    .col-sm-6
+      .page-header
+        h1 Adoptee
+      .panel.panel-default(ng-class="{busy: busy()}")
+        .panel-heading.clearfix
+          button.pull-right.btn.btn-primary.btn-sm(ng-click="bulkMatch()", ng-show="adopteeSearchResults && adopteeSearchResults.totalCount > 0 && currentAdopter.criteria.count <= adopteeSearchResults.totalCount"  data-ng-disabled="permission.readonly") <  Bulk Match
+          div(adoptee-search)
+        div(adoptee-search-results)
+        .panel-footer(ng-show="adopteeSearchResults && adopteeSearchResults.totalCount > 0")
+          ul.pager
+            li.previous(ng-class="{disabled: adopteePage.current == 1}")
+              a(class="editAdoptee" href="" ng-click="getAdopteePage(adopteePage.previous)") Previous
+            li
+              .input-group.input-group-page
+                .input-group-addon Page
+                input.form-control(type="number", min="1", max="{{adopteePage.total}}", ng-model="adopteePage.current", ng-change="getAdopteePage(adopteePage.current)")
+                .input-group-addon of {{adopteePage.total}}
+            li.next(ng-class="{disabled: adopteePage.current == adopteePage.total}")
+              a(href="" ng-click="getAdopteePage(adopteePage.next)") Next
+      div(adoptee-criteria, ng-show="adopteeSearchResults && adopteeSearchResults.totalCount > 0")

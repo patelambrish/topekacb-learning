@@ -1,0 +1,232 @@
+html
+head
+  style.
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.42857143;
+    }
+    @media all {
+      .page-break	{ display: none; }
+    }
+    @media print {
+      .page-break	{ display: block; page-break-before: always; }
+    }
+    ul {
+      list-style: none;
+      padding-left: 0px;
+      margin-bottom: 0px;
+    }
+    img {
+        padding: 5px;
+    }
+    .align-right { text-align: right; }
+    .align-left { text-align: left; }
+     div > span {
+       padding:5px;
+     }
+     div.content {
+       /*padding: 15px;
+       margin-bottom: 20px;*/
+       background-color: white;
+       /*border: 1px solid lightgray;
+       border-radius: 4px;
+       -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);*/
+     }
+     .label {
+       font-weight: bold;
+     }
+     .page-header {
+       padding-bottom: 10px;
+       margin: 10px 0 10px;
+       border-bottom: 1px solid #aaaaaa;
+     }
+     h2, h3 {
+       margin-bottom: 5px;
+     }
+     h3 {
+       margin-top: 5px;
+       padding-left: 4px;
+       border-bottom: 1px solid lightgray;
+     }
+     .pull-right {
+       float: right !important;
+     }
+     td {
+       vertical-align: top;
+       padding: 3px;
+     }
+     .details {
+       font-size: 12px;
+     }
+     .details > table {
+       font-size: 12px;
+     }
+     .full-width {
+       width:100%;
+     }
+     .border-right {
+       border-right: 1px solid lightgray;
+     }
+body
+  table(class="full-width")
+    tr
+      td
+        h2 #{lastName}, #{firstName} #{middleInitial}
+        - if(adopter) {
+        div.details
+          table
+            tr
+              td.border-right
+                span.label Adopted by,
+                br
+                | #{adopter.name}, #{adopter.org}
+                br
+                | #{adopter.address.street}, #{adopter.address.city}, #{adopter.address.state} - #{adopter.address.zip}
+                br
+                | Email: #{adopter.email}
+              td.border-right
+                span.label Adopter Phone(s):
+                br
+                each ph in adopter.phones
+                 - if (ph.name) {
+                   span #{ph.name}:
+                 - }
+                 - if(ph.contact) {
+                   | #{ph.contact} -
+                 -}
+                 - if(ph.number) {
+                   | #{ph.number}
+                 -}
+                 br
+               td
+                 span.label Delivery Method:
+                  - if(adopter.notifyMethods && adopter.notifyMethods[0]) {
+                  | #{adopter.notifyMethods[0]}
+                  - }
+                  - else {
+                  | Not Available
+                  - }
+        - }
+      td
+        div(class="align-right")
+          img(src="http://topekacb.org/assets/image/uw-logo.png" width="100")
+          img(src="http://topekacb.org/assets/image/cb-logo-green.png" width="80")
+  //div.page-header
+    h2 #{lastName}, #{firstName} #{middleInitial}
+      small.pull-right Application Number: #{applicationNumber}
+  div(class="content")
+      h3 Adoptee Contact Information
+      table
+        tbody
+          tr
+            td.label Name:
+            td #{firstName} #{middleInitial}
+            td
+              span.label Gender:
+              |#{gender}
+          tr
+            td.label Address:
+            td #{address.homeAddress},
+              br
+              |#{address.city}, #{address.state} - #{address.zip}
+          tr
+            td.label Phone:
+            td
+              - if (true) {
+                span.label OK to send Text Message?:
+                - if(isOkToText) {
+                  | Yes
+                -}
+                - if(!isOkToText) {
+                  | No
+                -}
+              -}
+              - if (cell1Phone) {
+                br
+                span.label Cell 1:
+                - if(cell1Phone.name) {
+                  | #{cell1Phone.name} -
+                -}
+                - if(cell1Phone.number) {
+                  | #{cell1Phone.number}
+                -}
+              -}
+              - if (cell2Phone) {
+                br
+                span.label Cell 2:
+                - if(cell2Phone.name) {
+                  | #{cell2Phone.name} -
+                -}
+                - if(cell2Phone.number) {
+                  | #{cell2Phone.number}
+                -}
+              -}
+              - if (otherPhone) {
+                br
+                span.label Other:
+                - if(otherPhone.name) {
+                  | #{otherPhone.name} -
+                -}
+                - if(otherPhone.number) {
+                  | #{otherPhone.number}
+                -}
+              -}
+          tr
+            td.label Email:
+            td #{email}
+      h3 Additional Information
+      table
+        tr
+          td.label Language
+          td
+            - if(language) {
+             | #{language} #{englishSpeaker}
+            - }
+            - else {
+             | Not Available
+            -}  
+      h3 Household Characteristics
+      table(class="full-width")
+        tr(class="align-left")
+          th.label Classification
+          th.label Special Needs
+        tr
+          td #{criteria.householdType}
+          td
+            ul
+              each val in criteria.specialNeeds
+               li=val
+        tr
+          td(colspan="2" class="label") Adoptee Story
+        tr
+          td(colspan="2") #{criteria.story}
+        tr
+          td(colspan="2" class="label") Volunteer Comments
+        tr
+          td(colspan="2") #{criteria.volunteerComment}
+      h3 Household Members
+      table(class="full-width")
+        tr(class="align-left")
+          th.label Name
+          th.label Age
+          th.label Gender
+          th.label Cloth Size
+          th.label Wishlist
+        each member in householdMembers
+          tr
+            td #{member.name}
+            td #{member.age}
+            td #{member.gender}
+            td Pant: #{member.pantSizeType} - #{member.pantSize}
+              br
+              | Shirt: #{member.shirtSizeType} - #{member.shirtSize}
+              br
+              | Shoe: #{member.shoeSizeType} - #{member.shoeSize}
+            td #{member.wishList}
+  hr
+  div.page-break
+            
+          
+          

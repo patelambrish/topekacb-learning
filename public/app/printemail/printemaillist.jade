@@ -1,0 +1,54 @@
+.container
+  .page-header
+    h1 Print and Email
+  .panel.panel-default(ng-class="{busy: busy()}")
+    .panel-heading.clearfix
+      form.pull-left
+        .btn-toolbar
+          .input-group.input-group-filter
+            input.form-control(type="text", placeholder="Filter", ng-model="query", ng-change="applyFilter(query)")
+    
+          .input-group.input-group-sort
+            .input-group-addon Sort By:
+            input.form-control(type="text", ng-model="sort.text", disabled)
+            .input-group-btn
+              button.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown")
+                i.fa.fa-caret-down
+              ul.dropdown-menu.pull-right
+                li(ng-repeat="option in sort.options", ng-class="{active: sort.text == option.text}")
+                  a(href="", ng-click="applySort(option)") {{option.text}}                  
+    table.table
+      thead
+        tr
+          th Name
+          th Type
+          th Status
+          th Create Date
+          th &nbsp;
+      tbody
+        tr(ng-repeat="req in reqList | orderBy:sort.value | startFrom:(page.current-1)*page.size | limitTo:page.size")
+          td
+            | {{req.adopter.name}}<span ng-if="req.adopter.org">,</span>
+            | {{req.adopter.org}}
+          td {{req.jobType}}            
+          td {{req.status}}
+          td
+            time {{req.createDate | date}}&nbsp;
+            | by {{req.createdBy | fullName}}
+          td
+            a.btn.btn-primary(data-ng-click="req.status='Complete'" data-ng-href="api/print/{{req._id}}" data-ng-if="req.status === 'Not Complete' && req.adopter" target='_blank')
+              i.fa.fa-print
+              | &nbsp;Print
+            a.btn.btn-primary(data-ng-href="api/printemails/{{req._id}}" data-ng-if="req.status === 'Complete' && req.adopter" target='_blank') View
+            span(data-ng-if="!req.adopter") Missing Adopter
+    .panel-footer
+      ul.pager
+        li.previous(ng-class="{disabled: page.current == 1}")
+          a(href="" ng-click="applyPage(page.previous)") Previous
+        li
+          .input-group.input-group-page
+            .input-group-addon Page
+            input.form-control(type="number", min="1", max="{{page.total}}", ng-model="page.current", ng-change="applyPage(page.current)")
+            .input-group-addon of {{page.total}}
+        li.next(ng-class="{disabled: page.current == page.total}")
+          a(href="" ng-click="applyPage(page.next)") Next

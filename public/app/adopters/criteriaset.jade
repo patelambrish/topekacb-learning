@@ -1,0 +1,82 @@
+fieldset(id="criteriaForm", ng-form="criteriaForm")
+  legend(ng-if="title") {{title}}
+    a.pull-right.collapse-toggle(href="", tabindex="-1", data-toggle="collapse", data-target="#criteriaForm > .collapse")
+      i.fa.fa-chevron-up
+  .row.collapse.in
+    .col-sm-3
+      .form-group(ng-class="{'has-error': criteriaForm.count.$invalid}", ng-hide="fields.count===false")
+        label.control-label 
+          | Number of Households&nbsp;
+          .label(ng-show="criteriaForm.count.$error.number") Invalid
+        input.form-control(type="number", name="count", placeholder="Number of households", min="1", ng-model="adopter.criteria.count")
+    .col-sm-3
+      .form-group(ng-class="{'has-error': criteriaForm.memberCount.$invalid}", ng-hide="fields.memberCount===false")
+        label.control-label 
+          | Number of Members&nbsp;
+          .label(ng-show="criteriaForm.memberCount.$error.number") Invalid
+        input.form-control(type="number", name="memberCount", placeholder="Number of members", min="1", ng-model="adopter.criteria.memberCount")
+  .row.collapse.in
+    .col-sm-7
+      .form-group
+        label Household Types
+        .checkbox(ng-repeat="e in adopter.enums.household")
+          label
+            input(type="checkbox", name="household", ng-value="e", ng-click="setFlags(adopter.criteria.households, e)", ng-checked="adopter.criteria.households.indexOf(e) > -1")
+            | {{e}}
+    .col-sm-5
+      .form-group
+        label Children's Ages
+        .checkbox(ng-repeat="e in adopter.enums.age")
+          label
+            input(type="checkbox", name="age", ng-value="e", ng-click="setFlags(adopter.criteria.childAges, e)", ng-checked="adopter.criteria.childAges.indexOf(e) > -1")
+            | {{e}}
+      .form-group
+        label Special Needs
+        .checkbox(ng-repeat="e in adopter.enums.special")
+          label
+            input(type="checkbox", name="special", ng-value="e", ng-click="setFlags(adopter.criteria.special, e)", ng-checked="adopter.criteria.special.indexOf(e) > -1")
+            | {{e}}
+  .row.collapse.in
+    .col-sm-12
+      .panel.panel-default(id="comment")
+        .panel-heading
+          a.pull-right.collapse-toggle.collapsed(href="", tabindex="-1", data-toggle="collapse", data-target="#comment .panel-collapse")
+            i.fa.fa-chevron-down
+          label Comments
+        .panel-collapse.collapse
+          textarea.form-control(name="comment", rows="4", placeholder="Comments", ng-model="adopter.criteria.comment")
+  .row.collapse.in
+    .col-sm-12          
+      .panel.panel-default(id="adopteeList")
+        .panel-heading
+          a.pull-right.collapse-toggle.collapsed(href="", tabindex="-1", data-toggle="collapse", data-target="#adopteeList .panel-collapse")
+            i.fa.fa-chevron-down
+          label Matched Adoptees
+        .panel-collapse.collapse(ng-switch="adopter.adoptees.length")
+          .panel-body(ng-switch-when="0") No matched adoptees found.
+          table.table.table-hover(ng-switch-default)
+            thead
+              tr
+                th Name
+                th Household Type
+                th Members
+                th &nbsp;
+            tbody
+              tr(ng-repeat="adoptee in adopter.adoptees | orderBy:sort.value | startFrom:(page.current-1)*page.size | limitTo:page.size")
+                td(ng-click="select(adoptee)") {{adoptee.lastName}}, {{adoptee.firstName}}
+                td(ng-click="select(adoptee)") {{adoptee.criteria.householdType}}
+                td(ng-click="select(adoptee)") {{adoptee.householdMembers.length}}
+                td.tool
+                  a(href="", title="Remove this Adoptee", tabindex="0", ng-click="remove(adoptee, $index)" data-ng-if="!permission.readonly")
+                    i.text-danger.fa.fa-times
+          .panel-footer(ng-if="adopter.adoptees.length > page.size")
+            ul.pager
+              li.previous(ng-class="{disabled: page.current == 1}")
+                a(href="" ng-click="applyPage(page.previous)") Previous
+              li
+                .input-group.input-group-page
+                  .input-group-addon Page
+                  input.form-control(type="number", min="1", max="{{page.total}}", ng-model="page.current", ng-change="applyPage(page.current)")
+                  .input-group-addon of {{page.total}}
+              li.next(ng-class="{disabled: page.current == page.total}")
+                a(href="" ng-click="applyPage(page.next)") Next

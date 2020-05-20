@@ -1,0 +1,135 @@
+.container
+  .page-header
+    h1 {{adopter.name || 'New Adopter'}}
+  form(role="form", name="form", novalidate)
+    .alert.alert-danger(ng-show="submitted && form.$invalid")
+      strong Please correct the validation errors below so that we can save this adopter.
+      ul
+        li(ng-show="form.name.$invalid") Name cannot be blank.
+        li(ng-show="form.org.$invalid") Organization cannot be blank when Type of Adopter is {{adopter.entity}}.
+        li(ng-show="form.dept.$invalid") Department cannot be blank when Type of Adopter is {{adopter.entity}}.
+        li(ng-show="form.address.$invalid") Street Address cannot be blank.
+        li(ng-show="form.zip.$invalid") ZIP code must be either 5 digits or 9 digits. Example: 12345 or 12345-1234.
+        li(ng-show="form.phoneForm.number.$error.required") Phone Number cannot be blank, at least one must be filled out. 
+        li(ng-show="form.phoneForm.number.$error.pattern") Phone Number must be 10 digits. Example: 9876543210 or 987-654-3210 or (987)654-3210.
+        li(ng-show="form.email.$error.required") Email cannot be blank when Notification Method is Email.
+        li(ng-show="form.email.$error.email") {{form.email.$viewValue}} is not a valid email. Example: john.smith@example.com.
+        li(ng-show="form.criteriaForm.count.$invalid") Number of Households must either be blank or a number greater than 0.
+    .panel.panel-default
+      .panel-body
+        fieldset(id="adopter" data-ng-disabled="permission.readonly")
+          legend Adopter Information
+            a.pull-right.collapse-toggle(href="", tabindex="-1", data-toggle="collapse", data-target="#adopter .collapse")
+              i.fa.fa-chevron-up
+          .row.collapse.in
+            .col-sm-3
+              .form-group
+                label.control-label Type of Adopter
+                select.form-control(ng-model="adopter.entity", ng-options="e for e in adopter.enums.entity")
+            .col-sm-4.col-md-3(ng-class="{'col-sm-6 col-md-5': adopter.entity == 'Individual'}")
+              .form-group(ng-class="{'has-error': form.name.$invalid && submitted}")
+                label.control-label 
+                  | Name&nbsp;
+                  .label.label-default(ng-show="form.name.$error.required") Required
+                input.form-control(type="text", name="name", placeholder="Name", required, ng-model="adopter.name")
+            .col-sm-4.col-md-3(ng-if="adopter.entity == 'Organization' || adopter.entity == 'Department'")
+              .form-group(ng-class="{'has-error': form.org.$invalid && submitted}")
+                label.control-label 
+                  | Organization&nbsp;
+                  .label.label-default(ng-show="form.org.$error.required") Required
+                input.form-control(type="text", name="org", placeholder="Organization", required, ng-model="adopter.org")
+            .col-sm-4.col-md-3(ng-if="adopter.entity == 'Department'")
+              .form-group(ng-class="{'has-error': form.dept.$invalid && submitted}")
+                label.control-label 
+                  | Department&nbsp;
+                  .label.label-default(ng-show="form.dept.$error.required") Required
+                input.form-control(type="text", name="dept", placeholder="Department", required, ng-model="adopter.dept")
+        fieldset(id="address" data-ng-disabled="permission.readonly")
+          legend Address
+            a.pull-right.collapse-toggle(href="", tabindex="-1", data-toggle="collapse", data-target="#address .collapse")
+              i.fa.fa-chevron-up
+          .row.collapse.in
+            .col-sm-4
+              .form-group(ng-class="{'has-error': form.address.$invalid && submitted}")
+                label.control-label 
+                  | Street&nbsp;
+                  .label.label-default(ng-show="form.address.$error.required") Required
+                input.form-control(type="text", name="address", placeholder="Address", required, ng-model="adopter.address.street")
+            .col-sm-3.col-md-4
+              .form-group
+                label City
+                input.form-control(type="text", name="city", placeholder="City", ng-model="adopter.address.city")
+            .col-sm-2
+              .form-group
+                label.control-label State
+                select.form-control(name="state", ng-model="adopter.address.state", ng-options="e for e in adopter.enums.state")
+                  option(disabled value="") State
+            .col-sm-3.col-md-2
+              .form-group(ng-class="{'has-error': form.zip.$invalid && (submitted)}")
+                label.control-label 
+                  | ZIP Code&nbsp;
+                  .label(ng-show="form.zip.$error.pattern") Invalid
+                input.form-control(type="text", name="zip", placeholder="ZIP Code", ng-pattern="validation.zip", ng-model="adopter.address.zip")
+        fieldset(id="phone" data-ng-disabled="permission.readonly")
+          legend Phone
+            a.pull-right.collapse-toggle(href="", tabindex="-1", data-toggle="collapse", data-target="#phone .collapse")
+              i.fa.fa-chevron-up
+          .row.collapse.in(ng-repeat="p in adopter.phones", ng-form="phoneForm")
+            .col-sm-3
+              .form-group(ng-class="{'has-error': phoneForm.number.$invalid && submitted}")
+                label.control-label
+                  | Number&nbsp;
+                  .label.label-default(ng-show="phoneForm.number.$error.required") Required
+                  .label(ng-show="phoneForm.number.$error.pattern") Invalid
+                input.form-control(type="tel", name="number", placeholder="Phone", ng-pattern="validation.phone", ng-model="p.number", ng-required="$first")
+            .col-sm-3
+              .form-group
+                label.control-label Contact Name
+                input.form-control(type="text", name="contact", placeholder="Contact", ng-model="p.contact")
+            .col-sm-3
+              .form-group
+                label.control-label Phone
+                select.form-control(name="name", ng-model="p.name", ng-options="e for e in adopter.enums.phone")
+            .col-sm-3
+              .form-group(ng-hide="$first")
+                br
+                a.btn.btn-link(href="", tabindex="-1", ng-click="deletePhone(p, $index)")
+                  span.text-danger
+                    i.fa.fa-times
+            hr.visible-xs-block
+          .row.collapse.in
+            .col-sm-12
+              .form-group
+                a.btn.btn-link(href="", ng-click="addPhone()")
+                  i.fa.fa-plus
+                  | &nbsp;Add new
+        fieldset(id="notification" data-ng-disabled="permission.readonly")
+          legend Notification Method
+            a.pull-right.collapse-toggle(href="", tabindex="-1", data-toggle="collapse", data-target="#notification .collapse")
+              i.fa.fa-chevron-up
+          .row.collapse.in
+            .col-sm-4
+              .form-group
+                label.radio-inline(ng-repeat="e in adopter.enums.notify")
+                  input(type="radio", name="notifyMethods" ng-value="e", ng-click="setFlags(adopter.notifyMethods, e, true)", ng-checked="adopter.notifyMethods.indexOf(e) > -1")
+                  | {{e}}
+                p.help-block Method for receiving household information
+            .col-sm-4
+              .form-group(ng-class="{'has-error': form.email.$invalid && submitted}")
+                label.control-label 
+                  | Primary Email&nbsp;
+                  .label(ng-show="form.email.$error.email") Invalid
+                input.form-control(type="email", name="email", placeholder="Primary Email", ng-model="adopter.email")
+            .col-sm-4
+              .form-group(ng-class="{'has-error': form.email2.$invalid && submitted}")
+                label.control-label 
+                  | Secondary Email&nbsp;
+                  .label(ng-show="form.email2.$error.email2") Invalid
+                input.form-control(type="email", name="email2", placeholder="Secondary Email", ng-model="adopter.email2")
+        div(data-criteriaset, data-title="Household Criteria", data-adopter="adopter"  data-ng-disabled="permission.readonly")
+      .panel-footer
+        .btn-toolbar.text-right
+          button.btn.btn-default(type="button", tabindex="-1", ng-click="cancel()", ng-disabled="busy() || permission.readonly") Cancel
+          button.btn.btn-primary(type="submit", ng-click="save(form, true)" data-ng-disabled="permission.readonly") Save and New
+          button.btn.btn-primary(type="submit", ng-click="save(form)" data-ng-disabled="permission.readonly") Save
+          
